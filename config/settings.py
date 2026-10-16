@@ -73,6 +73,8 @@ STATIC_URL = "static/"
 STATIC_ROOT = DATA_DIR / "static"
 MEDIA_URL = "media/"
 MEDIA_ROOT = DATA_DIR / "media"
+SERVE_STATIC = env.bool("DJANGO_SERVE_STATIC", default=True)
+SERVE_MEDIA = env.bool("DJANGO_SERVE_MEDIA", default=True)
 
 for _directory in (DATA_DIR / "db", LOG_DIR, LOG_FILE.parent, STATIC_ROOT, MEDIA_ROOT):
     _directory.mkdir(parents=True, exist_ok=True)
