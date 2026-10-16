@@ -19,3 +19,7 @@ class InvalidOrdering(DomainError):
 class SessionCompleted(DomainError):
     status_code = 409
     default_detail = "Прохождение уже завершено"
+
+
+class OptionsNotAllowed(DomainError):
+    default_detail = "Для вопроса со свободным ответом варианты ответа не предусмотрены"

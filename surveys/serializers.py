@@ -4,6 +4,7 @@ from rest_framework import serializers
 
 from answers.models import SurveySession
 from answers.serializers import SurveySessionProgressSerializer
+from surveys.enums import QuestionKind
 from surveys.models import AnswerOption, Question, Survey
 
 
@@ -60,6 +61,19 @@ class QuestionSerializer(serializers.ModelSerializer[Question]):
             "options",
         ]
         read_only_fields = ["id", "order", "kind_display", "options"]
+
+    def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
+        instance = self.instance if isinstance(self.instance, Question) else None
+        kind = attrs.get("kind", instance.kind if instance is not None else QuestionKind.SINGLE_CHOICE)
+        allows_custom_answer = attrs.get(
+            "allows_custom_answer",
+            instance.allows_custom_answer if instance is not None else True,
+        )
+        if kind == QuestionKind.TEXT and not allows_custom_answer:
+            raise serializers.ValidationError(
+                {"allows_custom_answer": "Для вопроса со свободным ответом свой вариант обязателен"}
+            )
+        return attrs
 
 
 class ReorderSerializer(serializers.Serializer[Any]):
