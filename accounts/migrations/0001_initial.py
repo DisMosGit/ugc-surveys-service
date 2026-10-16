@@ -131,7 +131,7 @@ class Migration(migrations.Migration):
                 (
                     "role",
                     models.PositiveSmallIntegerField(
-                        choices=[(1, "Прохождение"), (2, "Автор опросов")], default=1, verbose_name="Роль"
+                        choices=[(1, "Участник"), (2, "Автор")], default=1, verbose_name="Роль"
                     ),
                 ),
             ],
