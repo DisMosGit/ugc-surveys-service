@@ -1,0 +1,56 @@
+services:
+  db:
+    image: postgres:18.6-alpine3.24
+    environment:
+      POSTGRES_DB: ${DB_NAME:-ugc_surveys}
+      POSTGRES_USER: ${DB_USER:-ugc_surveys}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-ugc_surveys}
+    volumes:
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  web:
+    build: .
+    command:
+      - sh
+      - -c
+      - >-
+        python manage.py migrate --noinput &&
+        granian --interface asginl --host 0.0.0.0 --port 8000 --http 1 --no-ws
+        --no-access-log --no-metrics --workers 1 --reload
+        --reload-ignore-dirs=data,.venv,.git --reload-ignore-patterns="\.pyc$"
+        --factory config.asgi:build_default_application
+    environment:
+      DB_NAME: ${DB_NAME:-ugc_surveys}
+      DB_USER: ${DB_USER:-ugc_surveys}
+      DB_PASSWORD: ${DB_PASSWORD:-ugc_surveys}
+      DB_HOST: db
+      DB_PORT: 5432
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-dev-only-insecure-secret-key}
+      DJANGO_DEBUG: ${DJANGO_DEBUG:-True}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-localhost,127.0.0.1,[::1],web}
+      DJANGO_CSRF_TRUSTED_ORIGINS: ${DJANGO_CSRF_TRUSTED_ORIGINS:-http://localhost:8000,http://127.0.0.1:8000}
+      DJANGO_DATA_DIR: /app/data
+      DJANGO_LOG_DIR: /tmp/ugc-surveys-logs
+      DJANGO_ENV_FILE: /app/.env
+      DJANGO_LOG_LEVEL: ${DJANGO_LOG_LEVEL:-INFO}
+      DJANGO_SERVE_STATIC: ${DJANGO_SERVE_STATIC:-True}
+      DJANGO_SERVE_MEDIA: ${DJANGO_SERVE_MEDIA:-True}
+      PYTHONDONTWRITEBYTECODE: "1"
+    volumes:
+      - .:/app:ro
+      - ./.env:/app/.env:ro
+      - data:/app/data
+    ports:
+      - "${WEB_PORT:-8000}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  data:
