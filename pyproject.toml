@@ -13,7 +13,7 @@ dependencies = [
     "djangorestframework>=3.18.3",
     "granian[reload]>=2.8.4",
     "orjson>=3.13.0",
-    "psycopg[binary]>=3.3.6",
+    "psycopg[binary,pool]>=3.3.6",
     "python-ulid>=4.0.1",
 ]
 
