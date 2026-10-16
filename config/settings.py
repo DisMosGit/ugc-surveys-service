@@ -191,5 +191,11 @@ REST_FRAMEWORK = {
     ],
 }
 
+TASKS = {
+    "default": {
+        "BACKEND": "django.tasks.backends.immediate.ImmediateBackend",
+    },
+}
+
 UNSAFE_USER_HEADER = env.str("UNSAFE_USER_HEADER", default="X-Unsafe-User-Id")
 UNSAFE_USER_AUTO_CREATE = env.bool("UNSAFE_USER_AUTO_CREATE", default=True)
