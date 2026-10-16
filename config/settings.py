@@ -88,7 +88,11 @@ INSTALLED_APPS = [
     "core",
     "accounts",
     "surveys",
+    "answers",
+    "analytics",
 ]
+
+AUTH_USER_MODEL = "accounts.AdminUser"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -157,6 +161,9 @@ USE_I18N = True
 USE_TZ = True
 
 REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "accounts.authentication.UnsafeUserAuthentication",
+    ],
     "DEFAULT_RENDERER_CLASSES": [
         "config.renderers.OrjsonRenderer",
         "rest_framework.renderers.BrowsableAPIRenderer",
@@ -165,3 +172,6 @@ REST_FRAMEWORK = {
         "rest_framework.parsers.JSONParser",
     ],
 }
+
+UNSAFE_USER_HEADER = env.str("UNSAFE_USER_HEADER", default="X-Unsafe-User-Id")
+UNSAFE_USER_AUTO_CREATE = env.bool("UNSAFE_USER_AUTO_CREATE", default=True)

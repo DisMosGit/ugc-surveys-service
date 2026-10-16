@@ -46,15 +46,24 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "manage.py" = ["PLC0415"]
+"*/migrations/*.py" = ["E501"]
 
 [tool.mypy]
 strict = true
 plugins = ["mypy_django_plugin.main"]
-files = ["manage.py", "config", "core", "accounts", "surveys"]
+files = ["manage.py", "config", "core", "accounts", "surveys", "answers", "analytics"]
 
 [[tool.mypy.overrides]]
 module = ["environ"]
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["*.admin"]
+disable_error_code = ["type-arg"]
+
+[[tool.mypy.overrides]]
+module = ["core.models"]
+disable_error_code = ["type-arg"]
 
 [tool.django-stubs]
 django_settings_module = "config.settings"
