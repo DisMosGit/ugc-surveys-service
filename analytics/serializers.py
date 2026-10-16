@@ -11,10 +11,8 @@ class SurveyIdentitySerializer(serializers.Serializer[Any]):
 
 
 class SurveyCountersSerializer(serializers.Serializer[Any]):
-    started_count = serializers.IntegerField()
-    completed_count = serializers.IntegerField()
-    abandoned_count = serializers.IntegerField()
     answers_count = serializers.IntegerField()
+    completed_count = serializers.IntegerField()
     duration_sum_ms = serializers.IntegerField()
     average_duration_ms = serializers.SerializerMethodField()
     updated_at = serializers.DateTimeField()
@@ -30,7 +28,6 @@ class OptionStatisticsSerializer(serializers.Serializer[Any]):
     text = serializers.CharField()
     order = serializers.IntegerField()
     selected_count = serializers.IntegerField()
-    custom_answers_count = serializers.IntegerField()
     updated_at = serializers.DateTimeField()
 
 
@@ -39,7 +36,6 @@ class QuestionStatisticsSerializer(serializers.Serializer[Any]):
     text = serializers.CharField()
     order = serializers.IntegerField()
     answers_count = serializers.IntegerField()
-    skipped_count = serializers.IntegerField()
     updated_at = serializers.DateTimeField()
     options = OptionStatisticsSerializer(many=True)
 

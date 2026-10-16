@@ -12,7 +12,6 @@ class OptionBreakdown:
     text: str
     order: int
     selected_count: int
-    custom_answers_count: int
     updated_at: datetime
 
 
@@ -22,7 +21,6 @@ class QuestionBreakdown:
     text: str
     order: int
     answers_count: int
-    skipped_count: int
     updated_at: datetime
     options: list[OptionBreakdown]
 
@@ -42,7 +40,6 @@ def survey_breakdown(survey: Survey) -> SurveyBreakdown:
             text=row.question.text,
             order=row.question.order,
             answers_count=row.answers_count,
-            skipped_count=row.skipped_count,
             updated_at=row.updated_at,
             options=options.get(row.question_id, []),
         )
@@ -71,7 +68,6 @@ def _options_by_question(survey: Survey) -> dict[UUID, list[OptionBreakdown]]:
                 text=row.option.text,
                 order=row.option.order,
                 selected_count=row.selected_count,
-                custom_answers_count=row.custom_answers_count,
                 updated_at=row.updated_at,
             )
         )

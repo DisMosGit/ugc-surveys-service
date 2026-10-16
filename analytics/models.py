@@ -10,9 +10,7 @@ class SurveyStatistics(BaseModel):
         related_name="statistics",
         verbose_name="Опрос",
     )
-    started_count = models.PositiveBigIntegerField("Начато", default=0)
     completed_count = models.PositiveBigIntegerField("Завершено", default=0)
-    abandoned_count = models.PositiveBigIntegerField("Прервано", default=0)
     answers_count = models.PositiveBigIntegerField("Ответов", default=0)
     duration_sum_ms = models.BigIntegerField("Суммарная длительность, мс", default=0)
 
@@ -33,7 +31,6 @@ class QuestionStatistics(BaseModel):
         verbose_name="Вопрос",
     )
     answers_count = models.PositiveBigIntegerField("Ответов", default=0)
-    skipped_count = models.PositiveBigIntegerField("Пропущено", default=0)
 
     class Meta:
         ordering = ["-updated_at"]
@@ -52,7 +49,6 @@ class OptionStatistics(BaseModel):
         verbose_name="Вариант ответа",
     )
     selected_count = models.PositiveBigIntegerField("Выбрано", default=0)
-    custom_answers_count = models.PositiveBigIntegerField("Своих ответов", default=0)
 
     class Meta:
         ordering = ["-selected_count"]

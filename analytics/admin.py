@@ -7,9 +7,7 @@ from analytics.models import OptionStatistics, QuestionStatistics, SurveyStatist
 class SurveyStatisticsAdmin(admin.ModelAdmin):
     list_display = (
         "survey",
-        "started_count",
         "completed_count",
-        "abandoned_count",
         "answers_count",
         "duration_sum_ms",
         "updated_at",
@@ -21,7 +19,7 @@ class SurveyStatisticsAdmin(admin.ModelAdmin):
 
 @admin.register(QuestionStatistics)
 class QuestionStatisticsAdmin(admin.ModelAdmin):
-    list_display = ("question", "answers_count", "skipped_count", "updated_at")
+    list_display = ("question", "answers_count", "updated_at")
     search_fields = ("question__text",)
     autocomplete_fields = ("question",)
     readonly_fields = ("id", "created_at", "updated_at")
@@ -29,7 +27,7 @@ class QuestionStatisticsAdmin(admin.ModelAdmin):
 
 @admin.register(OptionStatistics)
 class OptionStatisticsAdmin(admin.ModelAdmin):
-    list_display = ("option", "selected_count", "custom_answers_count", "updated_at")
+    list_display = ("option", "selected_count", "updated_at")
     search_fields = ("option__text",)
     autocomplete_fields = ("option",)
     readonly_fields = ("id", "created_at", "updated_at")
