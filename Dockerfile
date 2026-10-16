@@ -49,4 +49,4 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
 
 CMD ["granian", "--interface", "asginl", "--host", "0.0.0.0", "--port", "8000", \
      "--http", "1", "--no-ws", "--no-access-log", "--no-metrics", "--no-reload", \
-     "--workers", "2", "config.asgi:application"]
+     "--workers", "2", "--backpressure", "16", "config.asgi:application"]

@@ -21,7 +21,7 @@ services:
       - >-
         python manage.py migrate --noinput &&
         granian --interface asginl --host 0.0.0.0 --port 8000 --http 1 --no-ws
-        --no-access-log --no-metrics --workers 1 --reload
+        --no-access-log --no-metrics --workers 1 --backpressure 16 --reload
         --reload-ignore-dirs=data,.venv,.git --reload-ignore-patterns="\.pyc$"
         --factory config.asgi:build_default_application
     environment:
