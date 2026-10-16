@@ -137,6 +137,14 @@ ROOT_URLCONF = "config.urls"
 WSGI_APPLICATION = "config.wsgi.application"
 
 if env.str("DB_USER", default=""):
+    pool_options: dict[str, Any] = {}
+    if env.bool("DB_POOL", default=True):
+        pool_options = {
+            "min_size": env.int("DB_POOL_MIN_SIZE", default=2),
+            "max_size": env.int("DB_POOL_MAX_SIZE", default=8),
+            "timeout": env.float("DB_POOL_TIMEOUT", default=10.0),
+            "max_lifetime": env.float("DB_POOL_MAX_LIFETIME", default=1800.0),
+        }
     DATABASES: dict[str, dict[str, Any]] = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
@@ -145,8 +153,9 @@ if env.str("DB_USER", default=""):
             "PASSWORD": env.str("DB_PASSWORD", default=""),
             "HOST": env.str("DB_HOST", default="localhost"),
             "PORT": env.str("DB_PORT", default="5432"),
-            "CONN_MAX_AGE": env.int("DB_CONN_MAX_AGE", default=600),
+            "CONN_MAX_AGE": 0 if pool_options else env.int("DB_CONN_MAX_AGE", default=600),
             "CONN_HEALTH_CHECKS": env.bool("DB_CONN_HEALTH_CHECKS", default=True),
+            "OPTIONS": {"pool": pool_options} if pool_options else {},
         },
     }
 else:
